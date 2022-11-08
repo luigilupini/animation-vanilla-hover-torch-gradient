@@ -1,12 +1,12 @@
 ## Hovering torch gradient
 
-> Here applied is a very cool gradient effect when we hover the card.
+> Here applied is a very cool torch like gradient effect when hovering a card.
 
 ![alt text](./capture.png)
 
 Featuring:
 
-- Here is six cards that we radial gradient over based on mouse position.
+- Here six cards we pseudo radial gradient a background based on mouse position.
 
 ```html
 <div id="cards">
@@ -25,43 +25,40 @@ This pseudo gradient is absolutely positioned "relative" to the parent card. The
 before element is relative to it, instead of the default surrounding page.
 
 ```css
-.card {
-  background: rgb(255, 255, 255, 0.02);
-  border: 1px solid rgb(255, 255, 255, 0.1);
-  border-radius: 10px;
-  cursor: pointer;
-  height: 250px;
-  width: 290px;
-  position: relative;
-}
-.card::before {
+.card::before,
+.card::after {
   content: "";
   position: absolute;
-  /* static configuration: */
-  /* background: radial-gradient(
-          800px circle at 100px 100px,
-          rgba(255, 255, 255, 0.06),
-          transparent 40%
-        ); */
-  /* dynamic JS configuration: (change origin position as mouse moves!)*/
+  border-radius: inherit;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  /* Remove these two to observe bug where gradient remains on/in card */
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.card::before {
+  /* JS provides variable for gradient origin: */
   background: radial-gradient(
     800px circle at var(--coords-x) var(--coords-y),
     rgba(255, 255, 255, 0.06),
     transparent 40%
   );
-
-  079 827 5926 // Oswald from NEXUS
-  border-radius: inherit;
-  top: 0px;
-  left: 0px;
-  height: 100%;
-  width: 100%;
-  z-index: 2;
-  /* Remove these two to observe bug where gradient remains on/in card */
-  opacity: 0;
-  transition: opacity 500ms;
+  z-index: 3;
 }
-/* Hover effect here 🧙‍♂️ */
+.card::after {
+  /* JS provides variable for gradient origin: */
+  background: radial-gradient(
+    600px circle at var(--coords-x) var(--coords-y),
+    rgba(255, 255, 255, 0.4),
+    transparent 40%
+  );
+  z-index: 1;
+}
+
+/* Apply hover effect here 🧙‍♂️ */
 .card:hover::before {
   opacity: 1;
 }
@@ -107,5 +104,17 @@ for (let card of cards) {
 - Extending the hovering effect on the card and sibling card borders.
 
 Because you can't provide coordinate color to different section of a border. Add
-an additional child to the card, giving a cloudy/opaque background that overlaps
-the parent by a small 1px appearing as a border but its an overflowing child.
+an additional inner child to each card `after` giving (cloudy/opaque) background
+that appears as a border but its an inner child that is 100% - 4px in (h/w).
+
+```css
+.card-inner {
+  position: absolute;
+  background: var(--card-inner);
+  border-radius: inherit;
+  margin: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  z-index: 2;
+}
+```

@@ -8,7 +8,7 @@
     <style>
       :root {
         --background: rgb(14, 14, 14);
-        --card-filler: rgb(23, 23, 23);
+        --card-inner: rgb(23, 23, 23);
         --text: #e9e9e9;
       }
 
@@ -33,13 +33,10 @@
         max-width: 916px;
         width: calc(100% - 20px);
       }
-      #cards:hover > .card::after {
-        opacity: 1;
-      }
 
       .card {
         background-color: rgb(255, 255, 255, 0.1);
-        /* Your border is not required because of `filler` div */
+        /* Your border is not required because of `inner` div */
         /* border: 1px solid rgb(255, 255, 255, 0.1); */
         border-radius: 10px;
         cursor: pointer;
@@ -74,21 +71,22 @@
       .card::after {
         /* dynamic JS configuration: */
         background: radial-gradient(
-          600px circle at var(--coords-x) var(--coords-y),
-          rgba(255, 255, 255, 0.4),
+          400px circle at var(--coords-x) var(--coords-y),
+          rgba(255, 255, 255, 0.2),
           transparent 40%
         );
         z-index: 1;
       }
 
       /* Apply hover effect here 🧙‍♂️ */
-      .card:hover::before {
+      .card:hover::before,
+      .card:hover::after {
         opacity: 1;
       }
 
-      .card > .card-filler {
+      .card-inner {
         position: absolute;
-        background: var(--card-filler);
+        background: var(--card-inner);
         border-radius: inherit;
         margin: 2px;
         width: calc(100% - 4px);
@@ -100,28 +98,22 @@
   <body>
     <div id="cards">
       <div class="card">
-        <!-- <div class="card-border"></div> -->
-        <div class="card-filler"></div>
+        <div class="card-inner"></div>
       </div>
       <div class="card">
-        <!-- <div class="card-border"></div> -->
-        <div class="card-filler"></div>
+        <div class="card-inner"></div>
       </div>
       <div class="card">
-        <!-- <div class="card-border"></div> -->
-        <div class="card-filler"></div>
+        <div class="card-inner"></div>
       </div>
       <div class="card">
-        <!-- <div class="card-border"></div> -->
-        <div class="card-filler"></div>
+        <div class="card-inner"></div>
       </div>
       <div class="card">
-        <!-- <div class="card-border"></div> -->
-        <div class="card-filler"></div>
+        <div class="card-inner"></div>
       </div>
       <div class="card">
-        <!-- <div class="card-border"></div> -->
-        <div class="card-filler"></div>
+        <div class="card-inner"></div>
       </div>
     </div>
 
