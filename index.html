@@ -8,8 +8,7 @@
     <style>
       :root {
         --background: rgb(14, 14, 14);
-        --border: rgb(255, 255, 255, 0.1);
-        --card-color: rgb(23, 23, 23);
+        --card-filler: rgb(23, 23, 23);
         --text: #e9e9e9;
       }
 
@@ -34,55 +33,96 @@
         max-width: 916px;
         width: calc(100% - 20px);
       }
+      #cards:hover > .card::after {
+        opacity: 1;
+      }
 
       .card {
-        background: rgb(255, 255, 255, 0.02);
-        border: 1px solid rgb(255, 255, 255, 0.1);
+        background-color: rgb(255, 255, 255, 0.1);
+        /* Your border is not required because of `filler` div */
+        /* border: 1px solid rgb(255, 255, 255, 0.1); */
         border-radius: 10px;
         cursor: pointer;
         height: 250px;
         width: 290px;
+        /* Required for all absolute children */
         position: relative;
       }
-      .card::before {
+      .card::before,
+      .card::after {
         content: "";
         position: absolute;
-        /* static configuration: */
-        /* background: radial-gradient(
-          800px circle at 100px 100px,
-          rgba(255, 255, 255, 0.06),
-          transparent 40%
-        ); */
+        border-radius: inherit;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        /* Remove these two to observe bug where gradient remains on/in card */
+        opacity: 0;
+        transition: opacity 500ms;
+      }
+
+      .card::before {
         /* dynamic JS configuration: */
         background: radial-gradient(
           800px circle at var(--coords-x) var(--coords-y),
           rgba(255, 255, 255, 0.06),
           transparent 40%
         );
-        border-radius: inherit;
-        top: 0px;
-        left: 0px;
-        height: 100%;
-        width: 100%;
-        z-index: 2;
-        /* Remove these two to observe bug where gradient remains on/in card */
-        opacity: 0;
-        transition: opacity 500ms;
+        z-index: 3;
       }
-      /* Hover effect here 🧙‍♂️ */
+      .card::after {
+        /* dynamic JS configuration: */
+        background: radial-gradient(
+          600px circle at var(--coords-x) var(--coords-y),
+          rgba(255, 255, 255, 0.4),
+          transparent 40%
+        );
+        z-index: 1;
+      }
+
+      /* Apply hover effect here 🧙‍♂️ */
       .card:hover::before {
         opacity: 1;
+      }
+
+      .card > .card-filler {
+        position: absolute;
+        background: var(--card-filler);
+        border-radius: inherit;
+        margin: 2px;
+        width: calc(100% - 4px);
+        height: calc(100% - 4px);
+        z-index: 2;
       }
     </style>
   </head>
   <body>
     <div id="cards">
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
+      <div class="card">
+        <!-- <div class="card-border"></div> -->
+        <div class="card-filler"></div>
+      </div>
+      <div class="card">
+        <!-- <div class="card-border"></div> -->
+        <div class="card-filler"></div>
+      </div>
+      <div class="card">
+        <!-- <div class="card-border"></div> -->
+        <div class="card-filler"></div>
+      </div>
+      <div class="card">
+        <!-- <div class="card-border"></div> -->
+        <div class="card-filler"></div>
+      </div>
+      <div class="card">
+        <!-- <div class="card-border"></div> -->
+        <div class="card-filler"></div>
+      </div>
+      <div class="card">
+        <!-- <div class="card-border"></div> -->
+        <div class="card-filler"></div>
+      </div>
     </div>
 
     <script>
@@ -90,9 +130,8 @@
 
       const handleMouseMove = (event) => {
         const { currentTarget: card, clientX, clientY } = event;
-        // The `getBoundingClientRect()` method returns a DOMRect object provide
-        // info about the element size & its position, relative to the viewport.
-        // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+        // The `getBoundingClientRect` method returns a `DOMRect` object provide
+        // info about an element size & its position, relative to the viewport.
         const { left: cardLeft, top: cardTop } = card.getBoundingClientRect(),
           // But we use it to calc our mouse position relative to each card.
           coordX = clientX - cardLeft,

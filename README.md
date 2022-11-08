@@ -49,6 +49,8 @@ before element is relative to it, instead of the default surrounding page.
     rgba(255, 255, 255, 0.06),
     transparent 40%
   );
+
+  079 827 5926 // Oswald from NEXUS
   border-radius: inherit;
   top: 0px;
   left: 0px;
@@ -101,3 +103,9 @@ for (let card of cards) {
   card.addEventListener("mousemove", handleMouseMove);
 }
 ```
+
+- Extending the hovering effect on the card and sibling card borders.
+
+Because you can't provide coordinate color to different section of a border. Add
+an additional child to the card, giving a cloudy/opaque background that overlaps
+the parent by a small 1px appearing as a border but its an overflowing child.
